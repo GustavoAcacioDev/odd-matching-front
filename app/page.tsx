@@ -1,7 +1,10 @@
-import Image from "next/image";
+import ValuableBetsDisplay from "@/components/pages/home/BetsDisplay";
+import evs from "@/utils/ev";
 
 export default function Home() {
   return (
-    <div>teste</div>
+    <div className="min-h-screen bg-gray-100 py-8">
+      <ValuableBetsDisplay bets={evs} />
+    </div>
   );
 }

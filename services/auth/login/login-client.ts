@@ -12,6 +12,5 @@ export function login({ username, password }: { username: string, password: stri
 
     const res = fetch.post<TLoginCustomerBody, ApiResponse<TLoginCustomerResponse>>('/login', body)
 
-
     return res
 }
