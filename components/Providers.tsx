@@ -1,15 +1,17 @@
 'use client'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { CookiesProvider } from 'next-client-cookies/server'
+import { SessionProvider } from 'next-auth/react'
 import React from 'react'
 
 const queryClient = new QueryClient()
 
 function Providers({ children }: { children: React.ReactNode }) {
     return (
-        <QueryClientProvider client={queryClient}>
-            <CookiesProvider>{children}</CookiesProvider>
-        </QueryClientProvider>
+        <SessionProvider basePath="/api/auth">
+            <QueryClientProvider client={queryClient}>
+                {children}
+            </QueryClientProvider>
+        </SessionProvider>
     )
 }
 

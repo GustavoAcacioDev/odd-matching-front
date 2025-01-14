@@ -1,11 +1,15 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+import { getToken } from 'next-auth/jwt';
 
 // Define the paths that require authentication
 const protectedPaths = ['/'];
 
-export function middleware(request: NextRequest) {
-  const token = request.cookies.get('authToken')?.value; // Replace 'authToken' with your cookie name
+export async function middleware(request: NextRequest) {
+  const token = await getToken({
+    req: request,
+    secret: process.env.NEXTAUTH_SECRET, // Ensure your secret matches the NextAuth configuration
+  });
 
   const currentPath = request.nextUrl.pathname;
 

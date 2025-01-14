@@ -1,13 +1,8 @@
-import { getSession } from 'next-auth/react';
-
-export const fetchAuthClient = () => {
+export const fetchAnonServer = () => {
   async function http<T>(path: string, config: RequestInit): Promise<T> {
     console.count(`fetching ${path}`)
 
-    const session = await getSession()
-
     config.headers = {
-      Authorization: `Bearer ${session?.user?.accessToken}`,
       ...config.headers,
     }
 
@@ -16,7 +11,6 @@ export const fetchAuthClient = () => {
       : `${process.env.NEXT_PUBLIC_API_URL}${path}`
 
     const request = new Request(fullPath, config)
-
     let response: Response
 
     try {
@@ -49,8 +43,6 @@ export const fetchAuthClient = () => {
       } catch (error) {
         const objError = error as Error
 
-        if (response.status === 401) window.location.reload()
-
         const errorBody = {
           status: response.status,
           statusText: response.statusText,
@@ -62,7 +54,7 @@ export const fetchAuthClient = () => {
       }
     }
 
-    // may error if there is no body, return empty object
+    // may error if there is no body, return empty array
     return response.json().catch((error) => {
       const objError = error as Error
 
@@ -83,6 +75,7 @@ export const fetchAuthClient = () => {
       'Content-Type': 'application/json',
       ...config,
     }
+
     return await http<T>(path, init)
   }
 
@@ -143,21 +136,5 @@ export const fetchAuthClient = () => {
     return await http<U>(path, init)
   }
 
-  async function del<T, U>(
-    path: string,
-    body: T,
-    config?: RequestInit,
-  ): Promise<U> {
-    const init = {
-      method: 'delete',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(body),
-      ...config,
-    }
-    return await http<U>(path, init)
-  }
-
-  return { get, post, postFile, put, del }
+  return { get, post, postFile, put }
 }

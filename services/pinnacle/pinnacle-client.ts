@@ -1,5 +1,6 @@
 import { ApiResponse, ApiResponseList } from "@/global";
 import { fetchAuthClient } from "@/lib/fetchWrapperClient/fetch-auth-client";
+import { leagues } from "@/utils/leagues_name";
 
 type TOddsResult = {
     "League": string,
@@ -11,10 +12,10 @@ type TOddsResult = {
 }
 
 
-export async function getBetbyOdds() {
+export async function getPinnacleOdds() {
     const fetch = fetchAuthClient()
 
-    const res = await fetch.get<ApiResponseList<TOddsResult>>('/betby')
+    const res = await fetch.post<typeof leagues, ApiResponseList<TOddsResult>>('/pinnacle', leagues)
 
     return res
 }

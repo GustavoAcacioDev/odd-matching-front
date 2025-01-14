@@ -12,6 +12,7 @@ import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { login } from '@/services/auth/login/login-client'
 import { useRouter } from 'next/navigation'
+import useAuth from '@/hooks/use-auth'
 
 const loginSchema = z.object({
     username: z.string().min(1, 'Campo obrigatório'),
@@ -22,7 +23,7 @@ type TLoginFormData = z.infer<typeof loginSchema>
 
 export default function LoginForm() {
     const [isLoading, setIsLoading] = useState(false)
-    const router = useRouter()
+    const { authWithNextAuth } = useAuth()
 
     const form = useForm<TLoginFormData>({
         resolver: zodResolver(loginSchema),
@@ -35,17 +36,10 @@ export default function LoginForm() {
     const handleSubmit = async (data: TLoginFormData) => {
         setIsLoading(true)
 
-        const res = await login(data)
-
-        if (res.isSuccess) {
-            document.cookie = `authToken=${res.value.accessToken}; max-age=3600; Secure`;
-            router.push('/')
-
-            return
-        } else {
-            form.setError("password", {message: "Ocorreu um erro, tente novamente!"})
-
-            setIsLoading(false)
+        try{
+            await authWithNextAuth(data)
+        } catch (error) {
+            console.error(error)
         }
     }
 
