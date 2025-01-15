@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/shadcn/button'
 import { getBetbyOdds } from '@/services/betby/betby-client'
 import { getPinnacleOdds } from '@/services/pinnacle/pinnacle-client'
 import { ValuableBet } from '@/types/bets'
-import { useQuery } from '@tanstack/react-query'
+import { useQueries, useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
 
 interface ValuableBetsDisplayProps {
@@ -14,15 +14,25 @@ interface ValuableBetsDisplayProps {
 export default function ValuableBetsDisplay({ bets }: ValuableBetsDisplayProps) {
     const [message, setMessage] = useState<string | null>(null)
 
-    const { data: betby } = useQuery({
-        queryKey: ['get-betby-odds'],
-        queryFn: () => getBetbyOdds(),
-      })
+    // const { data: betby } = useQuery({
+    //     queryKey: ['get-betby-odds'],
+    //     queryFn: () => getBetbyOdds(),
+    // })
 
-    const { data: pinnacle } = useQuery({
-        queryKey: ['get-pinnacle-odds'],
-        queryFn: () => getPinnacleOdds(),
-      })
+    // const { data: pinnacle } = useQuery({
+    //     queryKey: ['get-pinnacle-odds'],
+    //     queryFn: () => getPinnacleOdds(),
+    // })
+
+    const queries = useQueries({
+        queries: [
+            { queryKey: ['get-betby-odds'], queryFn: getBetbyOdds },
+            { queryKey: ['get-pinnacle-odds'], queryFn: getPinnacleOdds },
+        ],
+    })
+
+    const isLoading = queries.some((query) => query.isLoading)
+    const isFetching = queries.some((query) => query.isFetching)
 
     const getRecommendedTeam = (bet: ValuableBet) => {
         const evValues = Object.entries(bet.EV)
