@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Progress } from "@/components/ui/progress"
+import { Progress } from "@/components/ui/shadcn/progress"
 
 interface FetchProgressProps {
   label: string
