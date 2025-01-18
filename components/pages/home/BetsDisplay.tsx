@@ -1,9 +1,10 @@
 'use client'
 
+import { OpenBetsFloater } from '@/components/layout/OpenBetsFloater'
 import { Button } from '@/components/ui/shadcn/button'
 import { useFormSubmitHandler } from '@/hooks/useFormSubmitHandler'
-import { getEvs, refreshOdds } from '@/services/ev/ev-client'
-import { ValuableBet } from '@/types/bets'
+import { getBetHistory, getEvs, refreshOdds } from '@/services/ev/ev-client'
+import { BetResult, ValuableBet } from '@/types/bets'
 import { TEvResponse } from '@/types/evs'
 import { useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
@@ -16,6 +17,11 @@ export default function ValuableBetsDisplay() {
     const { data: evs, refetch } = useQuery({
         queryKey: ['get-evs'],
         queryFn: () => getEvs(),
+    })
+
+    const { data: openBets } = useQuery({
+        queryKey: ['get-open-bets'],
+        queryFn: () => getBetHistory(),
     })
 
     const getRecommendedTeam = (evResponse: TEvResponse): string => {
@@ -58,6 +64,10 @@ export default function ValuableBetsDisplay() {
         })
     }
 
+    const handleCloseBet = (betId: string, result: BetResult) => {
+      console.log(`Closing bet ${betId} with result: ${result}`)
+    }
+
     if (!evs || evs.items.length === 0) return null
 
     return (
@@ -90,6 +100,10 @@ export default function ValuableBetsDisplay() {
                     )
                 })}
             </div>
+
+            {openBets &&
+                <OpenBetsFloater bets={openBets.items} onCloseBet={handleCloseBet} />
+            }
         </div>
     )
 }

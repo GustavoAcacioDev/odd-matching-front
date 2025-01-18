@@ -30,6 +30,8 @@ export const authOptions: NextAuthOptions = {
 
         const res = await loginServer(reqBody)
 
+        console.log(res)
+
         if (!res.isSuccess) {
           console.log('Authentication failed')
           throw new Error(res.errors[0])
