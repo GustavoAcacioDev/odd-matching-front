@@ -32,14 +32,14 @@ export function CloseBetModal({ bet, isOpen, onClose, onConfirm }: CloseBetModal
         </DialogHeader>
         <div className="flex justify-center space-x-4 my-4">
           <Button
-            variant={selectedResult === 'win' ? 'positive' : 'outline'}
-            onClick={() => setSelectedResult('win')}
+            variant={selectedResult === 'won' ? 'positive' : 'outline'}
+            onClick={() => setSelectedResult('won')}
           >
             Vencedora
           </Button>
           <Button
-            variant={selectedResult === 'loss' ? 'negative' : 'outline'}
-            onClick={() => setSelectedResult('loss')}
+            variant={selectedResult === 'lost' ? 'negative' : 'outline'}
+            onClick={() => setSelectedResult('lost')}
           >
             Perdedora
           </Button>

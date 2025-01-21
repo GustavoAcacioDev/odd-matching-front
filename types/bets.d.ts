@@ -28,4 +28,4 @@ export interface OpenBet {
 }
 
 
-export type BetResult = 'win' | 'loss';
+export type BetResult = 'won' | 'lost';

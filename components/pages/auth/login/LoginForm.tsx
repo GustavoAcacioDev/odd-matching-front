@@ -2,16 +2,12 @@
 
 import { useState } from 'react'
 import { Button } from "@/components/ui/shadcn/button"
-import { Input } from "@/components/ui/shadcn/input"
-import { Label } from "@/components/ui/shadcn/label"
 import { useForm } from 'react-hook-form'
 import { Form } from '@/components/ui/shadcn/form'
 import InputDefault from '@/components/ui/input/ControlledInput/InputDefault'
 import InputPassword from '@/components/ui/input/ControlledInput/InputPassword'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { login } from '@/services/auth/login/login-client'
-import { useRouter } from 'next/navigation'
 import useAuth from '@/hooks/use-auth'
 
 const loginSchema = z.object({

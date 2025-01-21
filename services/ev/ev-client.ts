@@ -11,10 +11,18 @@ export function getEvs(){
     return res
 }
 
+export function getOpenBets(){
+    const fetch = fetchAuthClient()
+
+    const res = fetch.get<ApiResponseList<OpenBet>>('/betting-history?status=open')
+
+    return res
+}
+
 export function getBetHistory(){
     const fetch = fetchAuthClient()
 
-    const res = fetch.get<ApiResponseList<OpenBet>>('/betting-history')
+    const res = fetch.get<ApiResponseList<OpenBet>>('/betting-history?status=completed')
 
     return res
 }

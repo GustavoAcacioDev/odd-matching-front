@@ -1,10 +1,30 @@
+type MatchOdds = {
+    "Odd Team 1": string;
+    "Odd Draw": string;
+    "Odd Team 2": string;
+};
+
+type ImpliedProbability = {
+    "Implied Team 1": number;
+    "Implied Draw": number;
+    "Implied Team 2": number;
+};
+
+type ExpectedValue = {
+    "EV Team 1": number;
+    "EV Draw": number;
+    "EV Team 2": number;
+};
+
 export type TEvResponse = {
-    "Best Outcome": "Draw" | "Team 1" | "Team 2",
-    "Betby Odds": number,
-    "DateTime": string,
-    "EV": number,
-    "League": string,
-    "Pinnacle Odds": number,
-    "Team 1": string,
-    "Team 2": string
-}
+    League: string;
+    DateTime: string;
+    "Team 1": string;
+    "Team 2": string;
+    "Betby Odds": MatchOdds;
+    "Pinnacle Odds": MatchOdds;
+    "Implied Probability": ImpliedProbability;
+    EV: ExpectedValue;
+    "Max EV": number;
+    "Confidence Score": number;
+};
