@@ -1,4 +1,4 @@
-import { ApiResponse, ApiResponseList } from "@/global";
+import { ApiResponse, ApiResponseList } from "../../../global";
 import { fetchAuthClient } from "@/lib/fetchWrapperClient/fetch-auth-client";
 import { OpenBet } from "@/types/bets";
 import { TEvResponse } from "@/types/evs";

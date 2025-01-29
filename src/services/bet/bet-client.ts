@@ -1,4 +1,4 @@
-import { ApiResponse } from "@/global";
+import { ApiResponse } from "../../../global";
 import { fetchAuthClient } from "@/lib/fetchWrapperClient/fetch-auth-client";
 import { BetResult } from "@/types/bets";
 

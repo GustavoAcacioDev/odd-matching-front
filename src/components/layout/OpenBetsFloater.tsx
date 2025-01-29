@@ -9,7 +9,7 @@ import { BetResult, OpenBet } from '@/types/bets'
 import { CloseBetModal } from './CloseBetModal'
 import { removeBet, TUpdateBet, updateBet } from '@/services/bet/bet-client'
 import { QueryObserverResult, RefetchOptions, useQueryClient } from '@tanstack/react-query'
-import { ApiResponse, ApiResponseList } from '@/global'
+import { ApiResponse, ApiResponseList } from '../../../global'
 import { useFormSubmitHandler } from '@/hooks/useFormSubmitHandler'
 import { TBalanceValue } from '@/services/balance/balance'
 

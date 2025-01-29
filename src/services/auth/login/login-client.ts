@@ -1,4 +1,4 @@
-import { ApiResponse } from "@/global";
+import { ApiResponse } from "../../../../global";
 import { fetchAnonClient } from "@/lib/fetchWrapperClient/fetch-anon-client";
 import { TLoginCustomerBody, TLoginCustomerResponse } from "@/types/auth";
 

@@ -11,7 +11,7 @@ import InputDefault from '@/components/ui/input/ControlledInput/InputDefault'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { ApiResponse } from '@/global'
+import { ApiResponse } from '../../../../global'
 
 const updateBalanceSchema = z.object({
     balance: z.string(),

@@ -117,8 +117,6 @@ export default function ValuableBetsDisplay() {
     }
   }
 
-  if (!evs || evs.items.length === 0) return null
-
   return (
     <div className="container mx-auto p-4 space-y-4">
       <div className="flex justify-between items-end">
@@ -131,7 +129,7 @@ export default function ValuableBetsDisplay() {
       </div>
 
       <div className="space-y-4">
-        {evs.items.map((bet, index) => {
+        {evs && evs.items.map((bet, index) => {
           const recommendedTeam = getRecommendedTeam(bet)
           return (
             <div key={index} className="border p-4 rounded-lg shadow-sm">
