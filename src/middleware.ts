@@ -5,7 +5,33 @@ import { getToken } from 'next-auth/jwt';
 // Define the paths that require authentication
 const protectedPaths = ['/'];
 
+function SessionExpiredRedirect(redirectUrl: URL) {
+  const response = NextResponse.redirect(redirectUrl)
+
+  console.log(`Session expired on ${process.env.NODE_ENV} environment`)
+
+  const cookiePrefix = process.env.NODE_ENV === 'production' ? '__Secure-' : ''
+  const sessionCookie = cookiePrefix + 'next-auth.session-token'
+
+  console.log('cookiePrefix: ', cookiePrefix)
+
+  response.cookies.set({
+    name: sessionCookie,
+    value: '',
+    expires: new Date(0),
+    secure: true,
+    httpOnly: true,
+    sameSite: 'none',
+  })
+
+  console.log('Response after deleting cookie: ', response.cookies.getAll())
+
+  return response
+}
+
 export async function middleware(request: NextRequest) {
+  const session = await getToken({ req: request, secret: process.env.NEXTAUTH_SECRET })
+
   const token = await getToken({
     req: request,
     secret: process.env.NEXTAUTH_SECRET, // Ensure your secret matches the NextAuth configuration

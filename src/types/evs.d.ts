@@ -18,6 +18,7 @@ type ExpectedValue = {
 
 export type TEvResponse = {
     League: string;
+    Link: string;
     DateTime: string;
     "Team 1": string;
     "Team 2": string;

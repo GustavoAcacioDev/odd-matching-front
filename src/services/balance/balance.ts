@@ -6,7 +6,6 @@ export type TBalanceValue = {
 }
 
 type TUpdateBalanceBody = {
-    username: string
     amount: number
 }
 
@@ -26,7 +25,6 @@ export function updateUserBalance(balance: number) {
     const fetch = fetchAuthClient()
 
     const body: TUpdateBalanceBody = {
-        username: "admin",
         amount: balance
     }
 

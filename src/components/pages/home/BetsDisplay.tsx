@@ -12,6 +12,7 @@ import { UserBalance } from "./UserBalance"
 import { getUserBalance } from "@/services/balance/balance"
 import { BetModal } from "@/components/layout/BetModal"
 import { placeBet, type TBet } from "@/services/bet/bet-client"
+import Link from "next/link"
 
 export default function ValuableBetsDisplay() {
   const [isFetching, setIsFetching] = useState(false)
@@ -143,6 +144,7 @@ export default function ValuableBetsDisplay() {
                   <p>Draw: {bet["Betby Odds"]["Odd Draw"]}</p>
                   <p>Team 2: {bet["Betby Odds"]["Odd Team 2"]}</p>
                 </div>
+
                 <div>
                   <p className="font-semibold">Pinnacle Odds:</p>
                   <p>Team 1: {bet["Pinnacle Odds"]["Odd Team 1"]}</p>
@@ -150,20 +152,32 @@ export default function ValuableBetsDisplay() {
                   <p>Team 2: {bet["Pinnacle Odds"]["Odd Team 2"]}</p>
                 </div>
               </div>
+
               <div className="mt-2">
                 <p className="font-semibold">EV:</p>
                 <p>Team 1: {bet.EV["EV Team 1"]}%</p>
                 <p>Draw: {bet.EV["EV Draw"]}%</p>
                 <p>Team 2: {bet.EV["EV Team 2"]}%</p>
               </div>
+
               <p className="mt-2">Max EV: {bet["Max EV"]}%</p>
               <p>Confidence Score: {bet["Confidence Score"]}</p>
               <p className="mt-2 text-blue-600 font-semibold">Recomendado: Apostar em {recommendedTeam}</p>
-              <Button className="mt-4" onClick={() => handlePlaceBet(bet)}>
-                Apostar
-              </Button>
+
+              <div className="flex gap-4 items-center">
+                <Button className="mt-4" onClick={() => handlePlaceBet(bet)}>
+                  Apostar
+                </Button>
+
+                <Button className="mt-4" asChild>
+                  <Link target="_blank" href={`https://csgoempire.com/match-betting?bt-path=${bet.Link}`}>
+                    Link da Partida
+                  </Link>
+                </Button>
+              </div>
             </div>
           )
+
         })}
       </div>
 
