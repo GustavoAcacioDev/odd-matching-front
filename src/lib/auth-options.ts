@@ -50,6 +50,8 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
 
+  secret: 'eholion', 
+
   callbacks: {
     async jwt({ token, user }) {
       if (user) return { ...token, ...user } as JWT
