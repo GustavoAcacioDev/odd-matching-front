@@ -50,23 +50,27 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
 
-  secret: 'eholion', 
-
   callbacks: {
     async jwt({ token, user }) {
-      if (user) return { ...token, ...user } as JWT
-
-      return token
+      if (user) {
+        return {
+          ...token,
+          accessToken: user.accessToken, // Ensure this exists
+          expiresIn: user.expiresIn,
+          expiresInDate: user.expiresInDate,
+        };
+      }
+      return token;
     },
-
-    async session({ token, session }) {
+  
+    async session({ session, token }) {
       session.user = {
         accessToken: token.accessToken as string,
         expiresIn: token.expiresIn,
         expiresInDate: token.expiresInDate,
-      }
-
-      return session
+      };
+  
+      return session;
     },
   },
 
