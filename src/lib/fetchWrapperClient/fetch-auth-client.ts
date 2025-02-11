@@ -1,89 +1,77 @@
 import { getSession } from 'next-auth/react';
 
 export const fetchAuthClient = () => {
-  async function http<T>(path: string, config: RequestInit): Promise<T> {
+  async function http<T>(path: string, config: RequestInit, timeout = 60000): Promise<T> { // Default timeout 60s
     console.count(`fetching ${path}`)
-
+  
     const session = await getSession()
-
+  
     config.headers = {
       Authorization: `Bearer ${session?.user?.accessToken}`,
       ...config.headers,
     }
-
+  
     const fullPath = path.includes('http')
       ? path
       : `${process.env.NEXT_PUBLIC_API_URL}${path}`
-
-    const request = new Request(fullPath, config)
-
+  
+    const controller = new AbortController()
+    const timeoutId = setTimeout(() => controller.abort(), timeout)
+  
+    const request = new Request(fullPath, { ...config, signal: controller.signal })
+  
     let response: Response
-
+  
     try {
       response = await fetch(request)
+      clearTimeout(timeoutId) // Clear timeout if request succeeds
     } catch (error) {
-      const objError = error as Error
-
+      clearTimeout(timeoutId)
+  
+      if ((error as Error).name === 'AbortError') {
+        throw new Error(JSON.stringify({ status: 408, statusText: 'Request Timeout', endpoint: path }))
+      }
+  
       const errorBody = {
         status: 0,
         statusText: 'Fetch Error',
         endpoint: path,
-        error: {
-          message: objError.message,
-          request: request.url,
-        },
+        error: { message: (error as Error).message, request: request.url },
       }
-
+  
       throw new Error(JSON.stringify(errorBody))
     }
-
+  
     if (!response.ok) {
       try {
         const res = await response.json()
-
-        if ('isSuccess' in res) {
-          return res
-        } else {
-          throw new Error(JSON.stringify(res))
-        }
+        if ('isSuccess' in res) return res
+        else throw new Error(JSON.stringify(res))
       } catch (error) {
-        const objError = error as Error
-
         if (response.status === 401) window.location.reload()
-
-        const errorBody = {
-          status: response.status,
-          statusText: response.statusText,
-          endpoint: path,
-          error: objError.message,
-        }
-
-        throw new Error(JSON.stringify(errorBody))
+  
+        throw new Error(
+          JSON.stringify({ status: response.status, statusText: response.statusText, endpoint: path, error: (error as Error).message })
+        )
       }
     }
-
-    // may error if there is no body, return empty object
-    return response.json().catch((error) => {
-      const objError = error as Error
-
-      const errorBody = {
-        status: response.status,
-        statusText: response.statusText,
-        endpoint: path,
-        error: 'No body found to parse, error: ' + objError.message,
-      }
-
-      return {}
-    })
+  
+    return response.json().catch((error) => ({
+      status: response.status,
+      statusText: response.statusText,
+      endpoint: path,
+      error: 'No body found to parse, error: ' + (error as Error).message,
+    }))
   }
+  
 
-  async function get<T>(path: string, config?: RequestInit): Promise<T> {
+  async function get<T>(path: string, config?: RequestInit, timeout = 60000): Promise<T> {
     const init = {
       method: 'get',
       'Content-Type': 'application/json',
       ...config,
     }
-    return await http<T>(path, init)
+    return await http<T>(path, init, timeout)
   }
 
   async function post<T, U>(
