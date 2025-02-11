@@ -1,0 +1,9 @@
+{
+    "buildCommand": "npm install && npm run postinstall",
+    "routes": [
+      {
+        "src": "/api/.*",
+        "dest": "/api/index.js"
+      }
+    ]
+  }

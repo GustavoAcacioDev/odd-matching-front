@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
+    "postinstall": "npx playwright install --with-deps",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
